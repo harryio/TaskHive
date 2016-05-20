@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.harryio.taskhive"
@@ -19,8 +19,14 @@ android {
     }
 }
 
+ext.jabitVersion = '1.1.0-SNAPSHOT'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+
+    compile "ch.dissem.jabit:jabit-core:$jabitVersion"
+    compile "ch.dissem.jabit:jabit-networking:$jabitVersion"
+    compile "ch.dissem.jabit:jabit-cryptography-spongy:$jabitVersion"
 }
