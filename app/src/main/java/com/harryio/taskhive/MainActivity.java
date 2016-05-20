@@ -8,16 +8,23 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 
+import com.harryio.taskhive.adapter.InboxAdapter;
 import com.harryio.taskhive.service.BitmessageService;
 import com.harryio.taskhive.service.BitmessageService.BitmessageBinder;
 import com.harryio.taskhive.service.Singleton;
 
-import ch.dissem.bitmessage.entity.BitmessageAddress;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ch.dissem.bitmessage.BitmessageContext;
+import ch.dissem.bitmessage.entity.Plaintext;
+import ch.dissem.bitmessage.entity.valueobject.Label;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -39,13 +46,23 @@ public class MainActivity extends AppCompatActivity {
             bound = false;
         }
     };
+    @BindView(R.id.full_node_switch)
+    SwitchCompat fullNodeSwitch;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SwitchCompat fullNodeSwitch = (SwitchCompat) findViewById(R.id.full_node_switch);
+        ButterKnife.bind(this);
+
+        setUpFullNodeSwitch();
+        setUpRecyclerView();
+    }
+
+    private void setUpFullNodeSwitch() {
         fullNodeSwitch.setChecked(BitmessageService.isRunning());
         fullNodeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -57,27 +74,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        (findViewById(R.id.send_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BitmessageAddress address = Singleton.getIdentity(MainActivity.this);
-                Log.i(TAG, "BitmessageAddress: " + address.getAddress());
-                Singleton
-                        .getBitmessageContext(MainActivity.this)
-                        .send(address, new BitmessageAddress("BM-2cVBKttb72XtHtYRhmq3Ta5szfQU6j89Y8"),
-                                "Test Task Hive", "Testing Task Hive.");
+    private void setUpRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        BitmessageContext bitmessageContext = Singleton.getBitmessageContext(this);
+        List<Label> labels = bitmessageContext.messages().getLabels();
+        Label inboxLabel = null;
+        for (Label label : labels) {
+            if (label.getType() == Label.Type.INBOX) {
+                inboxLabel = label;
+                break;
             }
-        });
+        }
 
-        (findViewById(R.id.join_chan_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String address = Singleton.getIdentity(MainActivity.this).getAddress();
-                Log.i(TAG, "BitmessageAddress: " + address);
-                Singleton.getBitmessageContext(MainActivity.this).joinChan("TaskHiveTest", address);
+        if (inboxLabel != null) {
+            List<Plaintext> messages = Singleton.getMessageRepository(this).findMessages(inboxLabel);
+            if (messages.size() > 0) {
+                InboxAdapter inboxAdapter = new InboxAdapter(messages);
+                recyclerView.setAdapter(inboxAdapter);
+            } else {
+                //todo show empty view here
             }
-        });
+        } else {
+            //todo show empty view here
+        }
     }
 
     private void startFullNode() {

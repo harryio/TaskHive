@@ -17,6 +17,7 @@ import ch.dissem.bitmessage.BitmessageContext;
 import ch.dissem.bitmessage.entity.BitmessageAddress;
 import ch.dissem.bitmessage.networking.DefaultNetworkHandler;
 import ch.dissem.bitmessage.ports.MemoryNodeRegistry;
+import ch.dissem.bitmessage.ports.MessageRepository;
 import ch.dissem.bitmessage.utils.TTL;
 import ch.dissem.bitmessage.utils.UnixTime;
 
@@ -86,5 +87,9 @@ public class Singleton {
             }
         }
         return messageListener;
+    }
+
+    public static MessageRepository getMessageRepository(Context context) {
+        return getBitmessageContext(context).messages();
     }
 }
