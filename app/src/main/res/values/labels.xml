@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inbox">Inbox</string>
+    <string name="draft">Drafts</string>
+    <string name="sent">Sent</string>
+    <string name="unread">Unread</string>
+    <string name="trash">Trash</string>
+    <string name="broadcasts">Broadcasts</string>
+</resources>

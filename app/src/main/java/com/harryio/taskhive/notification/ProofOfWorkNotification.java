@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
-import com.harryio.taskhive.MainActivity;
+import com.harryio.taskhive.ui.MainActivity;
 import com.harryio.taskhive.R;
 
 /**

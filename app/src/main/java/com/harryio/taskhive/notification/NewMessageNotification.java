@@ -10,7 +10,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 
-import com.harryio.taskhive.MainActivity;
+import com.harryio.taskhive.ui.MainActivity;
 import com.harryio.taskhive.R;
 
 import java.util.Collection;
@@ -42,8 +42,8 @@ public class NewMessageNotification extends AbstractNotification {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
-        builder.addAction(R.drawable.ic_action_reply, ctx.getString(R.string.reply), pendingIntent);
-        builder.addAction(R.drawable.ic_action_delete, ctx.getString(R.string.delete),
+        builder.addAction(R.drawable.ic_reply, ctx.getString(R.string.reply), pendingIntent);
+        builder.addAction(R.drawable.ic_delete, ctx.getString(R.string.delete),
                 pendingIntent);
         notification = builder.build();
         return this;

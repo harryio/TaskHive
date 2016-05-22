@@ -2,7 +2,6 @@ package com.harryio.taskhive.service;
 
 import android.content.Context;
 
-import com.harryio.taskhive.R;
 import com.harryio.taskhive.adapter.AndroidCryptography;
 import com.harryio.taskhive.listener.MessageListener;
 import com.harryio.taskhive.repository.AndroidAddressRepository;
@@ -10,8 +9,6 @@ import com.harryio.taskhive.repository.AndroidInventory;
 import com.harryio.taskhive.repository.AndroidMessageRepository;
 import com.harryio.taskhive.repository.AndroidProofOfWorkRepository;
 import com.harryio.taskhive.repository.SqlHelper;
-
-import java.util.List;
 
 import ch.dissem.bitmessage.BitmessageContext;
 import ch.dissem.bitmessage.entity.BitmessageAddress;
@@ -26,7 +23,7 @@ public class Singleton {
     public static final Object lock = new Object();
     private static BitmessageContext bitmessageContext;
     private static MessageListener messageListener;
-    private static BitmessageAddress identity;
+    private static BitmessageAddress channelAddress;
     private static AndroidProofOfWorkRepository powRepo;
 
     public static BitmessageContext getBitmessageContext(Context context) {
@@ -57,25 +54,17 @@ public class Singleton {
         return bitmessageContext;
     }
 
-    public static BitmessageAddress getIdentity(Context ctx) {
-        if (identity == null) {
+    public static BitmessageAddress getChannelAddress(Context context) {
+        if (channelAddress == null) {
             synchronized (Singleton.class) {
-                if (identity == null) {
-                    BitmessageContext bmc = getBitmessageContext(ctx);
-                    List<BitmessageAddress> identities = bmc.addresses()
-                            .getIdentities();
-                    if (identities.size() > 0) {
-                        identity = identities.get(0);
-                    } else {
-                        identity = bmc.createIdentity(false);
-//                        identity = bmc.createChan("TaskHiveTest");
-                        identity.setAlias(ctx.getString(R.string.alias_default_identity));
-                        bmc.addresses().save(identity);
-                    }
+                if (channelAddress == null) {
+                    BitmessageContext bmc = getBitmessageContext(context);
+                    return bmc.createChan("TaskHive");
                 }
             }
         }
-        return identity;
+
+        return channelAddress;
     }
 
     public static MessageListener getMessageListener(Context ctx) {
