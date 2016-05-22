@@ -11,26 +11,10 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="TaskHive"
-        app:titleTextColor="@android:color/white">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/full_node_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"
-            android:text="@string/full_node"
-            android:textSize="16sp"
-            app:switchPadding="20dp"
-            />
-
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

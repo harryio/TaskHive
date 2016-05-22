@@ -23,12 +23,6 @@
         <service android:name=".service.ProofOfWorkService"/>
         <service android:name=".service.BitmessageService"/>
 
-        <receiver android:name=".listener.WifiReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".ui.ComposeMessageActivity">
         </activity>
     </application>

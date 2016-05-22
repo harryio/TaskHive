@@ -10,6 +10,8 @@ import com.harryio.taskhive.repository.AndroidMessageRepository;
 import com.harryio.taskhive.repository.AndroidProofOfWorkRepository;
 import com.harryio.taskhive.repository.SqlHelper;
 
+import java.util.List;
+
 import ch.dissem.bitmessage.BitmessageContext;
 import ch.dissem.bitmessage.entity.BitmessageAddress;
 import ch.dissem.bitmessage.networking.DefaultNetworkHandler;
@@ -59,7 +61,12 @@ public class Singleton {
             synchronized (Singleton.class) {
                 if (channelAddress == null) {
                     BitmessageContext bmc = getBitmessageContext(context);
-                    return bmc.createChan("TaskHive");
+                    List<BitmessageAddress> chans = bmc.addresses().getChans();
+                    if (chans.size() > 0) {
+                        channelAddress = chans.get(0);
+                    } else {
+                        channelAddress = bmc.createChan("TaskHive");
+                    }
                 }
             }
         }

@@ -10,8 +10,6 @@ import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -39,9 +37,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.dissem.bitmessage.BitmessageContext;
 import ch.dissem.bitmessage.entity.BitmessageAddress;
+import ch.dissem.bitmessage.entity.Plaintext;
 import ch.dissem.bitmessage.entity.valueobject.Label;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        MessageListFragment.OnFragmentInteractionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRA_SHOW_MESSAGE = "com.harryio.taskhive.ShowMessage";
     public static final String ACTION_SHOW_INBOX = "com.harryio.taskhive.ShowInbox";
@@ -61,14 +61,10 @@ public class MainActivity extends AppCompatActivity {
             bound = false;
         }
     };
-    @BindView(R.id.full_node_switch)
-    SwitchCompat fullNodeSwitch;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private BitmessageContext bitmessageContext;
+
     private Label selectedLabel;
 
     @SuppressWarnings("ConstantConditions")
@@ -78,15 +74,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        bitmessageContext = Singleton.getBitmessageContext(this);
+        BitmessageContext bitmessageContext = Singleton.getBitmessageContext(this);
         List<Label> labels = bitmessageContext.messages().getLabels();
-        createDrawer(toolbar, labels);
+        createDrawer(labels);
+
+        MessageListFragment messageListFragment = MessageListFragment.getInstance(selectedLabel);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, messageListFragment)
+                .commit();
     }
 
-    private void createDrawer(Toolbar toolbar, List<Label> labels) {
+    private void createDrawer(List<Label> labels) {
         BitmessageAddress channelAddress = Singleton.getChannelAddress(this);
         IProfile channelProfile = new ProfileDrawerItem()
-                .withName(channelAddress.toString())
+                .withName("TaskHive")
                 .withNameShown(true)
                 .withEmail(channelAddress.getAddress())
                 .withTextColorRes(android.R.color.white)
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     item.withName(label.toString())
                             .withTag(label)
                             .withIcon(R.drawable.ic_inbox);
+                    selectedLabel = label;
                     break;
 
                 case SENT:
@@ -125,11 +127,11 @@ public class MainActivity extends AppCompatActivity {
             drawerItems.add(item);
         }
 
-
-
-        Drawer drawer = new DrawerBuilder()
+        new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(accountHeader)
                 .withDrawerItems(drawerItems)
                 .addStickyDrawerItems(new SwitchDrawerItem()
@@ -146,25 +148,28 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         })
-                        .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                            @Override
-                            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                                if (drawerItem.getTag() instanceof Label) {
-                                    selectedLabel = (Label) drawerItem.getTag();
-                                    showSelectedLabel();
-                                    return false;
-                                }
-                                return false;
-                            }
-                        })
-
                 )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (drawerItem.getTag() instanceof Label) {
+                            selectedLabel = (Label) drawerItem.getTag();
+                            showSelectedLabel();
+                            return false;
+                        }
+                        return false;
+                    }
+                })
                 .withShowDrawerOnFirstLaunch(true)
                 .build();
     }
 
     private void showSelectedLabel() {
-
+        if (getSupportFragmentManager().findFragmentById(R.id.container) instanceof MessageListFragment) {
+            MessageListFragment fragment = (MessageListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.container);
+            fragment.updateList(selectedLabel);
+        }
     }
 
     private void startFullNode() {
@@ -182,6 +187,16 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .show();
+    }
+
+    @Override
+    public void onItemClick(Plaintext message) {
+
+    }
+
+    @Override
+    public void updateTitle(String title) {
+        toolbar.setTitle(title);
     }
 
     @Override
