@@ -200,6 +200,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void postJob() {
+        Intent intent = new Intent(this, ComposeMessageActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         bindService(new Intent(this, BitmessageService.class), connection, BIND_AUTO_CREATE);

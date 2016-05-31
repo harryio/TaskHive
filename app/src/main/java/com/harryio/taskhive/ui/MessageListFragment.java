@@ -58,11 +58,6 @@ public class MessageListFragment extends ListFragment {
         updateList(currentLabel);
     }
 
-    @OnClick(R.id.fab)
-    public void onClick() {
-        //todo implement
-    }
-
     public void updateList(Label label) {
         currentLabel = label;
         mListener.updateTitle(label.toString());
@@ -103,8 +98,14 @@ public class MessageListFragment extends ListFragment {
         unbinder.unbind();
     }
 
+    @OnClick(R.id.fab)
+    public void onClick() {
+        mListener.postJob();
+    }
+
     public interface OnFragmentInteractionListener {
         void onItemClick(Plaintext message);
         void updateTitle(String title);
+        void postJob();
     }
 }

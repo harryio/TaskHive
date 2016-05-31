@@ -75,4 +75,16 @@
     <string name="import_key">Import</string>
     <string name="anonymous">Anonymous</string>
     <string name="account_public">Public</string>
+    <string name="offer">Offer</string>
+    <string name="request">Request</string>
+    <string name="task_description">Task description</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="bitcoin">Bitcoin</string>
+    <string name="task_category">Task category</string>
+    <string name="add">Add</string>
+    <string name="post_task">Post Task</string>
+    <string name="task_type">Task Type</string>
+    <string name="paypal">Paypal</string>
+    <string name="dogecoin">Dogecoin</string>
+    <string name="task_keywords">Task Keywords</string>
 </resources>
