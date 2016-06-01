@@ -87,4 +87,5 @@
     <string name="paypal">Paypal</string>
     <string name="dogecoin">Dogecoin</string>
     <string name="task_keywords">Task Keywords</string>
+    <string name="keyword">Keyword</string>
 </resources>
