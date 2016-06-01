@@ -67,6 +67,7 @@
         </RadioGroup>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/task_description_textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -81,6 +82,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/task_category_textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -104,34 +106,34 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
 
-        <RadioGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/bitcoin_button"
+            <CheckBox
+                android:id="@+id/bitcoin_checkbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="@string/bitcoin"/>
 
-            <RadioButton
-                android:id="@+id/paypal_button"
+            <CheckBox
+                android:id="@+id/paypal_checkbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/paypal"/>
 
-            <RadioButton
-                android:id="@+id/dogecoin_button"
+            <CheckBox
+                android:id="@+id/dogecoin_checkbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/dogecoin"/>
 
-        </RadioGroup>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -162,6 +164,7 @@
             <EditText
                 android:id="@+id/keyword_editText"
                 android:layout_width="0dp"
+                android:hint="@string/keyword"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="text"
@@ -170,7 +173,7 @@
             <Button
                 android:id="@+id/add_keyword_button"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:layout_marginLeft="8dp"
                 android:background="?attr/colorPrimary"
                 android:text="@string/add"
