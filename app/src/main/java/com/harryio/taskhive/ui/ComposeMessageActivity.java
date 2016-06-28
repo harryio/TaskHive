@@ -16,9 +16,6 @@ import android.widget.Toast;
 import com.dpizarro.autolabel.library.AutoLabelUI;
 import com.dpizarro.autolabel.library.Label;
 import com.harryio.taskhive.R;
-import com.harryio.taskhive.ui.model.Task;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,11 +155,5 @@ public class ComposeMessageActivity extends AppCompatActivity {
         for (Label label : labels) {
             keywords.add(label.getText());
         }
-
-        Task task = new Task(taskType, description, paymentMethods, Integer.parseInt(category), keywords);
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<Task> jsonAdapter = moshi.adapter(Task.class);
-
-        String taskJson = jsonAdapter.toJson(task);
     }
 }
